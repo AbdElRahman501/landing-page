@@ -68,15 +68,12 @@ for (let i = 1; i <= sections.length; i++) {
 
 
 
-function activate(num) {
-    // store the sections on constants
-    let theSection = document.getElementById(`section${num}`);
-
+function activate(theSection) {
     // add active to the menu-link
-    let theLink = document.querySelector(`.section${num}`);
+    let theLink = document.querySelector(`.${theSection.id}`);
 
     // detrmin the Y offset of the section and want it to active when it apperd with 200 px 
-    let sectionYOffset = theSection.getBoundingClientRect().y - 200;
+    let sectionYOffset = theSection.getBoundingClientRect().y - 500;
     // to set it un active while it passes 
     let height = theSection.getBoundingClientRect().height;
 
@@ -89,6 +86,7 @@ function activate(num) {
             theSection.classList.add("active")
             //add active class to menu link
             theLink.classList.add("active")
+            scrollToSection(theSection)
         } else {
             return;
         }
@@ -101,11 +99,11 @@ function activate(num) {
 }
 
 // for each section of the page 
-for (let i = 1; i <= sections.length; i++) {
+for (let i = 0; i < sections.length; i++) {
     // we need to call the function on scrolling 
     document.addEventListener('scroll', function() {
         // excute the same function for all sections
-        activate(i)
+        activate(sections[i])
     });
 }
 
@@ -117,16 +115,13 @@ for (let i = 1; i <= sections.length; i++) {
 let menuLinks = document.getElementsByClassName("menu__link")
 
 // make function that scroll to the section with id
-function scrollToId(ID) {
-    //define the section that we are going to 
-    let theSection = document.getElementById(ID);
+function scrollToSection(theSection) {
     // get the Y Offset of that section
     let sectionYOffset = theSection.getBoundingClientRect().y;
     // sum of the section Y offset to window Y Offset will get back the position of the section
     let windowYOffset = window.pageYOffset;
     // add 50 px to make it a little more under the nav bar 
     let sectionLocation = sectionYOffset + windowYOffset - 50
-
     //let's scroll to the section Location smooth with scrollTo();
     window.scrollTo(({
         top: sectionLocation,
@@ -140,7 +135,8 @@ for (let menuLink of menuLinks) {
     menuLink.addEventListener("click", function(event) {
         event.preventDefault()
         // it will send the ID of the section to the function
-        scrollToId(menuLink.textContent || menuLink.getAttribute("href").slice(1))
+        let theSection = document.getElementById(menuLink.textContent || menuLink.getAttribute("href").slice(1));
+        scrollToSection(theSection)
     })
 }
 
